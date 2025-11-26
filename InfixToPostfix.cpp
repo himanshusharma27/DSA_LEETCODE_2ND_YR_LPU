@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+#include<stack>
+using namespace std ;
+
+
+int precendence(char c){
+    if(c=='^') return 3;
+    if(c== '*' || c== '/') return 2 ;
+    if(c=='+' || c == '-') return 1 ;
+
+    return -1;
+}
+
+string inFiXToPostFix(string s ){
+    stack<char>st;
+    string ans = "";
+
+    for(char c : s){
+        if(isalnum(c)){
+            ans +=c;
+        }else if(c=='('){
+            st.push(c);
+        }
+        else if(c==')'){
+            while(!st.empty() && st.top() != '('){
+                ans+= st.top();
+                st.pop();
+            }
+            st.pop();
+        }
+        else{
+            while(!st.empty() && precendence(st.top()) >=  precendence(c)){
+                ans+= st.top();
+                st.pop();
+            }
+            st.push(c);
+        }
+    }
+    while( !st.empty()){
+        ans+= st.top();
+        st.pop();
+    }
+    return ans ;
+}
+
+int main(){
+    string infix ;
+    cout<<"enter the infix:";
+    cin>>infix;
+
+    string postfix = inFiXToPostFix(infix);
+
+    cout<<"the postFix :"<<postfix<<endl;
+}
